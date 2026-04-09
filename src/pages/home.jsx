@@ -1,22 +1,10 @@
-// Kerangka dasar UI yang bisa kamu mulai
+import React from "react";
+
 function WeatherApp() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center p-4">
-      <div className="bg-white/20 backdrop-blur-md p-8 rounded-3xl shadow-lg w-full max-w-md border border-white/30 text-white">
-        {/* Search Bar */}
-        <input
-          type="text"
-          placeholder="Cari kota..."
-          className="w-full p-3 rounded-xl bg-white/10 outline-none placeholder:text-white/70"
-        />
-
-        {/* Main Info */}
-        <div className="text-center mt-10">
-          <h1 className="text-6xl font-bold">28°C</h1>
-          <p className="text-xl">Jakarta</p>
-          <p className="mt-2 font-light">Cerah Berawan</p>
-        </div>
-      </div>
+    <div className="min-h-screen bg-[url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center p-4 font-sans">
+      {/* Overlay Gelap agar teks terbaca */}
+      <div className="bg-black/30 absolute inset-0"></div>
     </div>
   );
 }

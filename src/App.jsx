@@ -2,6 +2,32 @@ import { useState } from "react";
 import "./App.css";
 
 function App() {
+  const [city, setCity] = useState("Jakarta");
+  const [weather, setWeather] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const API_KEY = "78bbe6e941df4fa7afc5923c2bb74f9d";
+  const toFetchWeather = async (city) => {
+    try {
+      console.log(city);
+      setLoading(true);
+      // const response = await fetch(
+      //   `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=id`
+      // );
+      // const data = await response.json();
+
+      if (data.cod === 200) {
+        setWeather(data);
+      } else {
+        alert("kota tidak ditemukan");
+      }
+    } catch (error) {
+      console.error("Terjadi kesalahan", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center p-4 font-sans flex content-center items-center">
       <div className="bg-black/30 absolute inset-0"></div>
@@ -12,8 +38,12 @@ function App() {
             type="text"
             placeholder="Cari kota..."
             className="w-full bg-white/10 px-4 py-2 rounded-3xl border border-white/20 text-white"
+            onChange={(e) => setCity(e.target.value)}
           />
-          <button className="bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-full text-white">
+          <button
+            className="bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-full text-white"
+            onClick={toFetchWeather}
+          >
             🔍
           </button>
         </div>

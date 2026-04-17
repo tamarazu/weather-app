@@ -1,20 +1,19 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [city, setCity] = useState("Jakarta");
+  const [cityName, setCityName] = useState("Jakarta");
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
 
   const API_KEY = "78bbe6e941df4fa7afc5923c2bb74f9d";
   const toFetchWeather = async (city) => {
     try {
-      console.log(city);
       setLoading(true);
-      // const response = await fetch(
-      //   `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=id`
-      // );
-      // const data = await response.json();
+      const response = await fetch(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${API_KEY}&lang=id`
+      );
+      const data = await response.json();
 
       if (data.cod === 200) {
         setWeather(data);
@@ -27,6 +26,7 @@ function App() {
       setLoading(false);
     }
   };
+  useEffect(() => {}, [cityName, weather]);
 
   return (
     <div className="min-h-screen bg-[url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center p-4 font-sans flex content-center items-center">
@@ -36,38 +36,49 @@ function App() {
         <div className="w-full flex gap-4">
           <input
             type="text"
+            value={cityName}
             placeholder="Cari kota..."
             className="w-full bg-white/10 px-4 py-2 rounded-3xl border border-white/20 text-white"
-            onChange={(e) => setCity(e.target.value)}
+            onChange={(e) => setCityName(e.target.value)}
           />
           <button
             className="bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-full text-white"
-            onClick={toFetchWeather}
+            onClick={() => {
+              toFetchWeather(cityName);
+            }}
           >
             🔍
           </button>
         </div>
         <div className="flex flex-col content-center items-center gap-3">
           <div>
-            <p className="text-white font-medium text-3xl">Jakarta, ID</p>
+            <p className="text-white font-medium text-3xl">{weather?.name}</p>
           </div>
           <div>
-            <p className="text-white font-bold text-8xl">28°C</p>
+            <p className="text-white font-bold text-8xl">
+              {weather?.main?.temp}°C
+            </p>
           </div>
           <div>
-            <p className="text-white font-light text-xl">
-              ⛅ <span className="capitalize">cerah berawan</span>
+            <p className="gap-4 text-white font-light text-xl flex items-center">
+              <img
+                className="w-1/5"
+                src={`https://openweathermap.org/img/wn/${weather?.weather[0]?.icon}@2x.png`}
+              />
+              <span className="capitalize">
+                {weather?.weather[0]?.description}
+              </span>
             </p>
           </div>
         </div>
         <div className="w-full pt-6 border-t border-white/20 grid grid-cols-2 place-items-center text-sm text-white/80 font-light">
           <div className="grid grid-rows-2 place-items-center">
             <p>Kelembaban</p>
-            <p className="font-semibold">75%</p>
+            <p className="font-semibold">{weather?.main?.humidity}%</p>
           </div>
           <div className="grid grid-rows-2 place-items-center">
             <p>Kecepatan Angin</p>
-            <p className="font-semibold">12 km/h</p>
+            <p className="font-semibold">{weather?.wind?.speed} km/h</p>
           </div>
         </div>
       </div>

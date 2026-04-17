@@ -72,14 +72,23 @@ function App() {
           </button>
         </div>
         <div className="flex flex-col content-center items-center gap-3">
-          <div>
-            <p className="text-white font-medium text-3xl">{weather?.name}</p>
-          </div>
-          <div>
-            <p className="text-white font-bold text-8xl">
-              {weather?.main?.temp}°C
-            </p>
-          </div>
+          {loading ? (
+            <div className="animate-pulse flex flex-col items-center">
+              <div className="h-12 w-32 bg-white/20 rounded-lg mb-4"></div>
+              <div className="h-24 w-24 bg-white/20 rounded-full"></div>
+            </div>
+          ) : (
+            <>
+              <div className="grid gap-4 place-items-center">
+                <p className="text-white font-medium text-3xl">
+                  {weather?.name}
+                </p>
+                <p className="text-white font-bold text-8xl">
+                  {weather?.main?.temp}°C
+                </p>
+              </div>
+            </>
+          )}
           <div>
             <p className="gap-4 text-white font-light text-xl flex items-center">
               <img

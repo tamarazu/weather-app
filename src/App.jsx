@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 
 function App() {
-  const [cityName, setCityName] = useState("Jakarta");
+  const [cityName, setCityName] = useState("");
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +26,24 @@ function App() {
       setLoading(false);
     }
   };
-  useEffect(() => {}, [cityName, weather]);
+
+  const fetchByLocation = async (city) => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => {
+        const { latitude, longitude } = position.coords;
+        const response = await fetch(
+          `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${API_KEY}&lang=id`
+        );
+        const data = await response.json();
+        setWeather(data);
+      });
+    } else {
+      toFetchWeather("jakarta");
+    }
+  };
+  useEffect(() => {
+    fetchByLocation();
+  }, []);
 
   return (
     <div className="min-h-screen bg-[url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=1920&q=80')] bg-cover bg-center p-4 font-sans flex content-center items-center">
@@ -40,9 +57,13 @@ function App() {
             placeholder="Cari kota..."
             className="w-full bg-white/10 px-4 py-2 rounded-3xl border border-white/20 text-white"
             onChange={(e) => setCityName(e.target.value)}
+            onKeyDown={(e) => {
+              e.key === "Enter" && toFetchWeather(cityName);
+            }}
           />
           <button
             className="bg-white/10 backdrop-blur-md border border-white/20 p-2 rounded-full text-white"
+            tabIndex="0"
             onClick={() => {
               toFetchWeather(cityName);
             }}
